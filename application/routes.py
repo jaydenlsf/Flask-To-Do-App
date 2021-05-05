@@ -37,8 +37,9 @@ def update_task(title, update, value):
             update_task.status = False
         else:
             return 'Unable to update status.'
-        print(update_task.status)
         db.session.commit()
+    else:
+        return 'Invalid entry.'
     return f'Modified "{update}" of task "{title.title()}" to "{value}".'
 
 @app.route('/delete/<title>')
