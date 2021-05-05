@@ -1,0 +1,11 @@
+{% extends 'index.html' %}
+
+{% block body %}
+
+<h1>View tasks</h1>
+
+{% for task in task_list %}
+{{ task }} <br><br>
+{% endfor %}
+
+{% endblock body %}

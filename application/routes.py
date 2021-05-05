@@ -1,28 +1,33 @@
 from application import app, db
 from application.models import Tasks
+from flask import render_template, flash, redirect
+from application.forms import TaskForm, UpdateForm
 
 @app.route('/')
 def home():
-    return '<h1>Welcome to the To-do-app homepage!</h1>'
+    return render_template('index.html', title='Homepage')
 
-@app.route('/add/<title>')
-def add(title):
-    new_task = Tasks(title=title)
-    db.session.add(new_task)
-    db.session.commit()
-    return f'Added a new task - "{title}".'
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    form = TaskForm()
+    if form.validate_on_submit():
+        flash(f'Added new task "{form.task.data}".')
+        new_task = Tasks(title=form.task.data, description=form.description.data, status=form.status.data)
+        print(form.status.data)
+        db.session.add(new_task)
+        db.session.commit()
+        return redirect('/')
+    return render_template('add_task.html', title='Add Task', form=form)
 
-@app.route('/read')
+@app.route('/all')
 def read():
     all_tasks = Tasks.query.all()
-    task_list = ''
+    task_list = []
     for task in all_tasks:
-        if task.status == True:
-            task_status = 'Completed'
-        elif task.status == False:
-            task_status = 'To be completed'
-        task_list += task.title.title() + ' - ' + str(task.description) + ' - ' + task_status + '<br>'
-    return task_list
+        if task.description == '':
+            task.description = 'No Description'
+        task_list.append(task.title.title() + ' --- ' + task.description + ' --- ' + task.status.title())
+    return render_template('tasks.html', title='View tasks', task_list=task_list)
 
 @app.route('/update/<title>:<update>:<value>')
 def update_task(title, update, value):
