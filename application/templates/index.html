@@ -11,13 +11,26 @@
     {% endif %}
 </head>
 <body>
+    <h1>To-do App</h1>
     <div>
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('add') }}">Add task</a>
-        <a href="{{ url_for('read') }}">View all</a>
+        <a href="{{ url_for('update_task') }}">Update</a>
     </div>
+    <br><br>
     {% block body %}
-    <h1>Welcome to the To-do App Homepage</h1>
+
+    <h3>Incompleted Tasks</h3>
+
+    {% for task in incompleted_list %}
+    {{ task }} <br><br>
+    {% endfor %}
+
+    <h3>Completed Tasks</h3>
+
+    {% for task in completed_list %}
+    {{ task }} <br><br>
+    {% endfor %}
     {% endblock body %}
 </body>
 </html>
