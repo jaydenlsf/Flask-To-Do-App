@@ -46,7 +46,3 @@ $ flask run
 ### Edit Task Page
 
 ![edit-task](https://user-images.githubusercontent.com/54101378/117377974-5fdfdc80-aecc-11eb-9355-59decc264c18.png)
-
-```
-
-```
