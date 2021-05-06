@@ -9,13 +9,25 @@ A very simple to-do list web application created using Flask, SQLAlchemy, WTForm
 To install the required dependencies:
 
 ```
-pip3 install -r requirements.txt
+$ pip3 install -r requirements.txt
 ```
 
 ## Instruction
 
-In order for the application to run, set your environment variables for `DATABASE_URI` and `SECRET_KEY`.
-`DATABASE_URI` is in the format of `'mysql+pymysql://root:testpass@localhost/testdb'` and `SECRET_KEY` can be anything.
+In order for the application to run, set your environment variables for `DATABASE_URI` and `SECRET_KEY`.<br/>
+`DATABASE_URI` is in the format of `'mysql+pymysql://root:testpass@localhost/testdb'` and `SECRET_KEY` can be anything.<br/><br/>
+
+After the variables are set, initialise an empty table within the database by running:
+
+```
+$ python3 create.py
+```
+
+To run the app:
+
+```
+$ flask run
+```
 
 ## Demo
 
@@ -34,3 +46,7 @@ In order for the application to run, set your environment variables for `DATABAS
 ### Edit Task Page
 
 ![edit-task](https://user-images.githubusercontent.com/54101378/117377974-5fdfdc80-aecc-11eb-9355-59decc264c18.png)
+
+```
+
+```
