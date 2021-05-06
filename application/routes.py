@@ -1,71 +1,77 @@
 from application import app, db
 from application.models import Tasks
-from flask import render_template, flash, redirect, url_for, request
-from application.forms import TaskForm, UpdateForm
+from flask import render_template, redirect, request, url_for
+from application.forms import TaskForm, UpdateTaskForm
 
-@app.route('/')
+
+@app.route("/", methods=["GET"])
 def home():
     all_tasks = Tasks.query.all()
-    completed_list = []
-    incompleted_list = []
+    incompleted_tasks = []
+    completed_tasks = []
 
     for task in all_tasks:
-        if task.status == 'incompleted':
-            if task.description == '':
-                task.description = 'No Description'
-                incompleted_list.append(str(task.date_created)[:11] + ' --- ' + task.title.title() + ' --- ' + task.description)
+        if task.status == "incompleted":
+            incompleted_tasks.append(task)
         else:
-            if task.description == '':
-                task.description = 'No Description'
-                completed_list.append(str(task.date_created)[:11] + ' --- ' + task.title.title() + ' --- ' + task.description)
+            completed_tasks.append(task)
 
-    if len(completed_list) == 0:
-        completed_list.append('No completed tasks.')
+    return render_template(
+        "index.html",
+        title="Homepage",
+        all_tasks=all_tasks,
+        incompleted_tasks=incompleted_tasks,
+        completed_tasks=completed_tasks,
+    )
 
-    if len(incompleted_list) == 0:
-        incompleted_list.append('No incompleted tasks.')
 
-    return render_template('index.html', title='Homepage', incompleted_list=incompleted_list, completed_list=completed_list)
-
-@app.route('/add', methods=['GET', 'POST'])
+@app.route("/add", methods=["GET", "POST"])
 def add():
     form = TaskForm()
-    if request.method == 'POST':
+
+    if request.method == "POST":
         if form.validate_on_submit():
-            new_task = Tasks(title=form.task.data, description=form.description.data, status=form.status.data)
+            new_task = Tasks(task=form.task.data, status=form.status.data)
             db.session.add(new_task)
             db.session.commit()
-            flash(f'Added new task "{form.task.data}".')
-            return redirect(url_for('home'))
-    return render_template('add_task.html', title='Add Task', form=form)
+            return redirect(url_for("home"))
+    return render_template("add.html", title="Add Task", form=form)
 
-@app.route('/update', methods=['GET', 'POST'])
-def update_task():
-    form = UpdateForm()
-    all_tasks = Tasks.query.all()
 
-    for task in all_tasks:
-        form.task.choices.append((task.id, f'{task.title}'))
+@app.route("/update/<int:id>", methods=["GET", "POST"])
+def update(id):
+    form = UpdateTaskForm()
 
-    if request.method == 'POST':
-        selected_task_id = form.task.data
-        update_task = Tasks.query.filter_by(id=selected_task).first()
+    if request.method == "POST":
+        update_task = Tasks.query.filter_by(id=id).first()
         if form.validate_on_submit():
-            if form.description.data != '':
-                update_task.description = form.description.data
-            
-            if form.status.data != update_task.status:
-                update_task.status = form.status.data
-
+            update_task.status = form.status.data
             db.session.commit()
-            return redirect(url_for('home'))
-            flash(f'Updated task "{form.task.data}"')
+            return redirect(url_for("home"))
+    return render_template(
+        "update.html", title="Update Task", form=form, update_task=update_task
+    )
 
-    return render_template('update_task.html', title='Update Task', form=form, all_tasks=all_tasks)
 
-@app.route('/delete/<title>')
-def delete(title):
-    delete_task = Tasks.query.filter_by(title=title).first()
+@app.route("/completed/<int:id>", methods=["POST"])
+def completed(id):
+    task = Tasks.query.filter_by(id=id).first()
+    task.status = "completed"
+    db.session.commit()
+    return redirect(url_for("home"))
+
+
+@app.route("/incompleted/<int:id>", methods=["POST"])
+def incompleted(id):
+    task = Tasks.query.filter_by(id=id).first()
+    task.status = "incompleted"
+    db.session.commit()
+    return redirect(url_for("home"))
+
+
+@app.route("/delete/<int:id>", methods=["GET", "POST"])
+def delete(id):
+    delete_task = Tasks.query.filter_by(id=id).first()
     db.session.delete(delete_task)
     db.session.commit()
-    return f'Deleted task "{title.title()}".'
+    return redirect(url_for("home"))

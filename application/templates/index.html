@@ -1,36 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% if title %}
-    <title>{{ title }}</title>
-    {% else %}
-    <title>To-do App</title>
-    {% endif %}
-</head>
-<body>
-    <h1>To-do App</h1>
-    <div>
-        <a href="{{ url_for('home') }}">Home</a>
-        <a href="{{ url_for('add') }}">Add task</a>
-        <a href="{{ url_for('update_task') }}">Update</a>
-    </div>
-    <br><br>
-    {% block body %}
+{% extends 'layout.html' %}
 
-    <h3>Incompleted Tasks</h3>
+{% block body %}
 
-    {% for task in incompleted_list %}
-    {{ task }} <br><br>
-    {% endfor %}
+{% if all_tasks|length < 1 %}
+<h2 style='color:blue'>Database is empty.</h2>
+<h2 style='color:blue'>Please make some tasks.</h2>
 
-    <h3>Completed Tasks</h3>
+{% else %}
+<h2 style='color:red'>Incompleted Tasks</h2>
+{% for task in incompleted_tasks %}
+<p>{{ task.date_created }} ➥ {{ task.task }}   
+    <form action="{{ url_for('update', id=task.id) }}" method="post">
+    <input type="submit" value='Update'>
+</form>
+<form action="{{ url_for('delete', id=task.id) }}" method="post">
+    <input type="submit" value='Delete'>
+</form>
+<form action="{{ url_for('completed', id=task.id) }}" method="post">
+    <input type="submit" value='Completed'>
+</form><br></p>
+{% endfor %}
 
-    {% for task in completed_list %}
-    {{ task }} <br><br>
-    {% endfor %}
-    {% endblock body %}
-</body>
-</html>
+<br><br>
+
+<h2 style='color:green'>Completed Tasks</h2>
+{% for task in completed_tasks %}
+<p>{{ task.date_created }} ➥ {{ task.task }}   
+    <form action="{{ url_for('update', id=task.id) }}" method="post">
+    <input type="submit" value='Update'>
+</form>
+<form action="{{ url_for('delete', id=task.id) }}" method="post">
+    <input type="submit" value='Delete'>
+</form>
+<form action="{{ url_for('incompleted', id=task.id) }}" method="post">
+    <input type="submit" value='Incompleted'>
+</form><br></p>
+{% endfor %}
+
+{% endif %}
+
+{% endblock body %}

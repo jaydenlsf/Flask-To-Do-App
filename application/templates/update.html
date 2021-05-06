@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<h2>Edit Task ✍</h2><br>
+
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p><i>⚞ {{ update_task.task }} ⚟</i></p>
+    <p>
+        {{ form.status }}
+    </p>
+    <p>{{ form.update }}</p>
+</form>
+
+
+{% endblock body %}
