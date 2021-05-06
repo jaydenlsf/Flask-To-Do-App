@@ -1,5 +1,22 @@
 # First QA Mini Project - Flask To-Do App
 
+## Introduction
+
+A very simple to-do list web application created using Flask, SQLAlchemy, WTForms and Jinja2.
+
+## Installation
+
+To install the required dependencies:
+
+```
+pip3 install -r requirements.txt
+```
+
+## Instruction
+
+In order for the application to run, set your environment variables for `DATABASE_URI` and `SECRET_KEY`.
+`DATABASE_URI` is in the format of `'mysql+pymysql://root:testpass@localhost/testdb'` and `SECRET_KEY` can be anything.
+
 ## Demo
 
 ### Homepage (without any tasks)
