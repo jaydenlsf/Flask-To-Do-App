@@ -9,7 +9,7 @@ class TaskForm(FlaskForm):
     submit = SubmitField('Add task')
 
 class UpdateForm(FlaskForm):
-    task = StringField('Task', validators=[DataRequired()])
+    task = SelectField('Task', choices=[])
     description = StringField('Description')
     status = SelectField('Status', choices=[('incompleted', 'Incompleted'), ('completed', 'Completed')])
     update = SubmitField('Update task')
