@@ -15,7 +15,7 @@ $ pip3 install -r requirements.txt
 ## Instruction
 
 In order for the application to run, set your environment variables for `DATABASE_URI` and `SECRET_KEY`.<br/>
-`DATABASE_URI` is in the format of `'mysql+pymysql://root:testpass@localhost/testdb'` and `SECRET_KEY` can be anything.<br/><br/>
+`DATABASE_URI` is in the format of `'mysql+pymysql://username:password@databaseinstanceip/databasename'` and `SECRET_KEY` can be anything.<br/><br/>
 
 After the variables are set, initialise an empty table within the database by running:
 
